@@ -140,3 +140,20 @@ class GitLabProjectsGateway:
             resource=f"projects/{project_id}/pipelines",
             params=params
         )
+        
+    #extraction des branches 
+    def get_project_branches(self, project_id: int, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+      """
+     Récupère la liste des branches d’un projet GitLab.
+    
+    Args:
+        project_id: Identifiant du projet.
+        params: Paramètres supplémentaires (optionnel).
+    
+    Returns:
+        Liste de dictionnaires représentant les branches.
+    """
+      return self.client.extract(
+        resource=f"projects/{project_id}/repository/branches",
+        params=params or {}
+    )
