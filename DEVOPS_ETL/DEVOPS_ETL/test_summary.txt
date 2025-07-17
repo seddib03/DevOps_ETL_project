@@ -1,0 +1,20 @@
+# Résumé des tests disponibles
+
+## Other Tests
+
+- `tests\conftest.py`
+- `tests\unit\extractors\gitlab\test_gitlab_client.py`
+- `tests\unit\extractors\gitlab\test_projects_gateway.py`
+- `tests\unit\extractors\gitlab\test_stats_extractor.py`
+- `tests\unit\extractors\gitlab\test_users_gateway.py`
+- `tests\unit\extractors\sonarqube\test_projects_gateway.py`
+- `tests\unit\extractors\sonarqube\test_sonarqube_client.py`
+- `tests\unit\extractors\test_gitlab_python_gitlab.py`
+- `tests\unit\extractors\test_gitlab_users.py`
+- `tests\unit\test_gitlab_client.py`
+- `tests\unit\test_gitlab_connection.py`
+- `tests\unit\test_secrets_enhanced.py`
+- `tests\unit\test_sonarqube_connection_enhanced.py`
+- `tests\utils\test_runner_enhanced.py`
+
+**Total des fichiers de test trouvés:** 14

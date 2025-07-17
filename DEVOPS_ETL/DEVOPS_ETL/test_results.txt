@@ -1,0 +1,1440 @@
+# Résultats des tests unitaires
+
+
+## Test: pytest tests/unit/extractors/gitlab -v
+
+```
+============================= test session starts =============================
+platform win32 -- Python 3.13.4, pytest-8.4.1, pluggy-1.6.0 -- d:\SMI_DEVS\DEVOPS_ETL\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\SMI_DEVS\DEVOPS_ETL
+configfile: pyproject.toml
+plugins: cov-6.2.1
+collecting ... collected 28 items
+
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_connect_successful FAILED [  3%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_connect_authentication_error FAILED [  7%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_connect_connection_error PASSED [ 10%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_test_connection FAILED [ 14%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_get_successful FAILED [ 17%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_get_with_params FAILED [ 21%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_get_not_connected FAILED [ 25%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_post_successful FAILED [ 28%]
+tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_pagination_handling FAILED [ 32%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_projects_without_params FAILED [ 35%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_projects_with_params FAILED [ 39%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_by_id FAILED [ 42%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_by_path FAILED [ 46%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_by_path_not_found FAILED [ 50%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_commits FAILED [ 53%]
+tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_branches FAILED [ 57%]
+tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_init PASSED [ 60%]
+tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_get_commit_stats PASSED [ 64%]
+tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_get_commit_stats_with_author_filter PASSED [ 67%]
+tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_get_merge_request_stats FAILED [ 71%]
+tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_get_issue_stats PASSED [ 75%]
+tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_get_pipeline_stats PASSED [ 78%]
+tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_users_without_params FAILED [ 82%]
+tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_users_with_params FAILED [ 85%]
+tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_user_by_id FAILED [ 89%]
+tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_user_by_username FAILED [ 92%]
+tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_user_by_username_not_found FAILED [ 96%]
+tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_current_user FAILED [100%]
+
+================================== FAILURES ===================================
+______________ TestGitLabClientComplete.test_connect_successful _______________
+
+self = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A65B2120>
+
+    def establish_connection(self) -> bool:
+        """
+        Établit la connexion au serveur GitLab.
+    
+        Returns:
+            bool: True si la connexion est réussie, False sinon
+        """
+        try:
+            self._logger.info("Establishing connection to GitLab API")
+            self._logger.debug(f"API URL: {self._api_url}")
+            self._logger.debug(f"Token length: {len(self._private_token) if self._private_token else 0}")
+    
+            # Créer le client GitLab
+            self._gitlab_client = gitlab.Gitlab(
+                url=self._api_url,
+                private_token=self._private_token,
+                timeout=self._request_timeout,
+                ssl_verify=self._ssl_verification_enabled,
+                retry_transient_errors=self._retry_on_errors
+            )
+    
+            self._logger.debug(f"GitLab client created: {self._gitlab_client}")
+            self._logger.debug(f"GitLab client user manager: {self._gitlab_client.user}")
+    
+            # Configurer le proxy si nécessaire
+            if self._proxy_configuration:
+                self._configure_proxy_settings()
+    
+            # Tester la connexion
+            self._logger.info("Testing GitLab connection...")
+>           self._gitlab_client.auth()
+
+src\extractors\gitlab\gitlab_client.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\gitlab\client.py:391: in auth
+    self.user = self._objects.CurrentUserManager(self).get()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\gitlab\exceptions.py:346: in wrapped_f
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\gitlab\mixins.py:122: in get
+    server_data = self.gitlab.http_get(self.path, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\gitlab\client.py:804: in http_get
+    result = self.http_request(
+.venv\Lib\site-packages\gitlab\client.py:728: in http_request
+    result = self._backend.http_request(
+.venv\Lib\site-packages\gitlab\_backends\requests_backend.py:157: in http_request
+    response: requests.Response = self._client.request(
+.venv\Lib\site-packages\requests\sessions.py:589: in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\requests\sessions.py:703: in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\responses\__init__.py:1202: in send
+    return self._on_request(adapter, request, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <responses.RequestsMock object at 0x00000247A6AAF4D0>
+adapter = <requests.adapters.HTTPAdapter object at 0x00000247A6E0C980>
+request = <PreparedRequest [GET]>, retries = None
+kwargs = {'cert': None, 'proxies': OrderedDict(), 'stream': False, 'timeout': 30, ...}
+request_url = 'https://gitlab.example.com/api/v4/api/v4/user', match = None
+match_failed_reasons = ['URL does not match'], resp_callback = None
+error_msg = "Connection refused by Responses - the call doesn't match any registered mock.\n\nRequest: \n- GET https://gitlab.example.com/api/v4/api/v4/user\n\nAvailable matches:\n- GET https://gitlab.example.com/api/v4/version URL does not match\n"
+
+    def _on_request(
+        self,
+        adapter: "HTTPAdapter",
+        request: "PreparedRequest",
+        *,
+        retries: Optional["_Retry"] = None,
+        **kwargs: Any,
+    ) -> "models.Response":
+        # add attributes params and req_kwargs to 'request' object for further match comparison
+        # original request object does not have these attributes
+        request.params = self._parse_request_params(request.path_url)  # type: ignore[attr-defined]
+        request.req_kwargs = kwargs  # type: ignore[attr-defined]
+        request_url = str(request.url)
+        request.body = self._read_filelike_body(request.body)
+    
+        match, match_failed_reasons = self._find_match(request)
+        resp_callback = self.response_callback
+    
+        if match is None:
+            if any(
+                [
+                    p.match(request_url)
+                    if isinstance(p, Pattern)
+                    else request_url.startswith(p)
+                    for p in self.passthru_prefixes
+                ]
+            ):
+                logger.info("request.allowed-passthru", extra={"url": request_url})
+                return self._real_send(adapter, request, **kwargs)  # type: ignore
+    
+            error_msg = (
+                "Connection refused by Responses - the call doesn't "
+                "match any registered mock.\n\n"
+                "Request: \n"
+                f"- {request.method} {request_url}\n\n"
+                "Available matches:\n"
+            )
+            for i, m in enumerate(self.registered()):
+                error_msg += "- {} {} {}\n".format(
+                    m.method, m.url, match_failed_reasons[i]
+                )
+    
+            if self.passthru_prefixes:
+                error_msg += "Passthru prefixes:\n"
+                for p in self.passthru_prefixes:
+                    error_msg += f"- {p}\n"
+    
+            response = ConnectionError(error_msg)
+            response.request = request
+    
+            self._calls.add(request, response)
+>           raise response
+E           requests.exceptions.ConnectionError: Connection refused by Responses - the call doesn't match any registered mock.
+E           
+E           Request: 
+E           - GET https://gitlab.example.com/api/v4/api/v4/user
+E           
+E           Available matches:
+E           - GET https://gitlab.example.com/api/v4/version URL does not match
+
+.venv\Lib\site-packages\responses\__init__.py:1129: ConnectionError
+
+During handling of the above exception, another exception occurred:
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6C77110>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A65B2120>
+
+    @responses.activate
+    def test_connect_successful(self, gitlab_client):
+        """Teste une connexion réussie à l'API GitLab."""
+        # Simuler une réponse réussie à l'API Version
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/version",
+            json={"version": "15.5.0"},
+            status=200
+        )
+    
+        # Exécuter la méthode connect
+>       result = gitlab_client.connect()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\extractors\gitlab\gitlab_client.py:151: in connect
+    return self.establish_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A65B2120>
+
+    def establish_connection(self) -> bool:
+        """
+        Établit la connexion au serveur GitLab.
+    
+        Returns:
+            bool: True si la connexion est réussie, False sinon
+        """
+        try:
+            self._logger.info("Establishing connection to GitLab API")
+            self._logger.debug(f"API URL: {self._api_url}")
+            self._logger.debug(f"Token length: {len(self._private_token) if self._private_token else 0}")
+    
+            # Créer le client GitLab
+            self._gitlab_client = gitlab.Gitlab(
+                url=self._api_url,
+                private_token=self._private_token,
+                timeout=self._request_timeout,
+                ssl_verify=self._ssl_verification_enabled,
+                retry_transient_errors=self._retry_on_errors
+            )
+    
+            self._logger.debug(f"GitLab client created: {self._gitlab_client}")
+            self._logger.debug(f"GitLab client user manager: {self._gitlab_client.user}")
+    
+            # Configurer le proxy si nécessaire
+            if self._proxy_configuration:
+                self._configure_proxy_settings()
+    
+            # Tester la connexion
+            self._logger.info("Testing GitLab connection...")
+            self._gitlab_client.auth()
+            self._logger.debug("Authentication successful")
+    
+            # Dans python-gitlab 6.1.0, user est directement accessible après auth()
+            current_user = self._gitlab_client.user
+            if current_user is None:
+                raise APIConnectionError("Failed to get current user - authentication may have failed")
+    
+            self._current_user_info = current_user.asdict()
+            self._connection_status = True
+            self.is_connected = True  # Mettre à jour l'état BaseExtractor
+    
+            self._logger.info(
+                f"GitLab connection successful - User: {self._current_user_info.get('name', 'Unknown')}, Server: {self._api_url}"
+            )
+    
+            return True
+    
+        except gitlab.GitlabAuthenticationError as e:
+            self._logger.error(f"Authentication failed: {e}")
+            raise APIAuthenticationError(f"GitLab authentication failed: {e}")
+        except gitlab.GitlabGetError as e:
+            self._logger.error(f"API error: {e}")
+            raise APIConnectionError(f"GitLab API error: {e}")
+        except Exception as e:
+            self._logger.error(f"Unexpected connection error: {e}")
+>           raise APIConnectionError(f"Unexpected GitLab connection error: {e}")
+E           src.core.exceptions.APIConnectionError: Unexpected GitLab connection error: Connection refused by Responses - the call doesn't match any registered mock.
+E           
+E           Request: 
+E           - GET https://gitlab.example.com/api/v4/api/v4/user
+E           
+E           Available matches:
+E           - GET https://gitlab.example.com/api/v4/version URL does not match
+
+src\extractors\gitlab\gitlab_client.py:272: APIConnectionError
+------------------------------ Captured log call ------------------------------
+ERROR    src.extractors.gitlab.gitlab_client:gitlab_client.py:271 Unexpected connection error: Connection refused by Responses - the call doesn't match any registered mock.
+
+Request: 
+- GET https://gitlab.example.com/api/v4/api/v4/user
+
+Available matches:
+- GET https://gitlab.example.com/api/v4/version URL does not match
+_________ TestGitLabClientComplete.test_connect_authentication_error __________
+
+self = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6E12850>
+
+    def establish_connection(self) -> bool:
+        """
+        Établit la connexion au serveur GitLab.
+    
+        Returns:
+            bool: True si la connexion est réussie, False sinon
+        """
+        try:
+            self._logger.info("Establishing connection to GitLab API")
+            self._logger.debug(f"API URL: {self._api_url}")
+            self._logger.debug(f"Token length: {len(self._private_token) if self._private_token else 0}")
+    
+            # Créer le client GitLab
+            self._gitlab_client = gitlab.Gitlab(
+                url=self._api_url,
+                private_token=self._private_token,
+                timeout=self._request_timeout,
+                ssl_verify=self._ssl_verification_enabled,
+                retry_transient_errors=self._retry_on_errors
+            )
+    
+            self._logger.debug(f"GitLab client created: {self._gitlab_client}")
+            self._logger.debug(f"GitLab client user manager: {self._gitlab_client.user}")
+    
+            # Configurer le proxy si nécessaire
+            if self._proxy_configuration:
+                self._configure_proxy_settings()
+    
+            # Tester la connexion
+            self._logger.info("Testing GitLab connection...")
+>           self._gitlab_client.auth()
+
+src\extractors\gitlab\gitlab_client.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\gitlab\client.py:391: in auth
+    self.user = self._objects.CurrentUserManager(self).get()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\gitlab\exceptions.py:346: in wrapped_f
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\gitlab\mixins.py:122: in get
+    server_data = self.gitlab.http_get(self.path, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\gitlab\client.py:804: in http_get
+    result = self.http_request(
+.venv\Lib\site-packages\gitlab\client.py:728: in http_request
+    result = self._backend.http_request(
+.venv\Lib\site-packages\gitlab\_backends\requests_backend.py:157: in http_request
+    response: requests.Response = self._client.request(
+.venv\Lib\site-packages\requests\sessions.py:589: in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\requests\sessions.py:703: in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\responses\__init__.py:1202: in send
+    return self._on_request(adapter, request, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <responses.RequestsMock object at 0x00000247A6AAF4D0>
+adapter = <requests.adapters.HTTPAdapter object at 0x00000247A6E12D50>
+request = <PreparedRequest [GET]>, retries = None
+kwargs = {'cert': None, 'proxies': OrderedDict(), 'stream': False, 'timeout': 30, ...}
+request_url = 'https://gitlab.example.com/api/v4/api/v4/user', match = None
+match_failed_reasons = ['URL does not match'], resp_callback = None
+error_msg = "Connection refused by Responses - the call doesn't match any registered mock.\n\nRequest: \n- GET https://gitlab.example.com/api/v4/api/v4/user\n\nAvailable matches:\n- GET https://gitlab.example.com/api/v4/version URL does not match\n"
+
+    def _on_request(
+        self,
+        adapter: "HTTPAdapter",
+        request: "PreparedRequest",
+        *,
+        retries: Optional["_Retry"] = None,
+        **kwargs: Any,
+    ) -> "models.Response":
+        # add attributes params and req_kwargs to 'request' object for further match comparison
+        # original request object does not have these attributes
+        request.params = self._parse_request_params(request.path_url)  # type: ignore[attr-defined]
+        request.req_kwargs = kwargs  # type: ignore[attr-defined]
+        request_url = str(request.url)
+        request.body = self._read_filelike_body(request.body)
+    
+        match, match_failed_reasons = self._find_match(request)
+        resp_callback = self.response_callback
+    
+        if match is None:
+            if any(
+                [
+                    p.match(request_url)
+                    if isinstance(p, Pattern)
+                    else request_url.startswith(p)
+                    for p in self.passthru_prefixes
+                ]
+            ):
+                logger.info("request.allowed-passthru", extra={"url": request_url})
+                return self._real_send(adapter, request, **kwargs)  # type: ignore
+    
+            error_msg = (
+                "Connection refused by Responses - the call doesn't "
+                "match any registered mock.\n\n"
+                "Request: \n"
+                f"- {request.method} {request_url}\n\n"
+                "Available matches:\n"
+            )
+            for i, m in enumerate(self.registered()):
+                error_msg += "- {} {} {}\n".format(
+                    m.method, m.url, match_failed_reasons[i]
+                )
+    
+            if self.passthru_prefixes:
+                error_msg += "Passthru prefixes:\n"
+                for p in self.passthru_prefixes:
+                    error_msg += f"- {p}\n"
+    
+            response = ConnectionError(error_msg)
+            response.request = request
+    
+            self._calls.add(request, response)
+>           raise response
+E           requests.exceptions.ConnectionError: Connection refused by Responses - the call doesn't match any registered mock.
+E           
+E           Request: 
+E           - GET https://gitlab.example.com/api/v4/api/v4/user
+E           
+E           Available matches:
+E           - GET https://gitlab.example.com/api/v4/version URL does not match
+
+.venv\Lib\site-packages\responses\__init__.py:1129: ConnectionError
+
+During handling of the above exception, another exception occurred:
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6C774D0>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6E12850>
+
+    @responses.activate
+    def test_connect_authentication_error(self, gitlab_client):
+        """Teste une erreur d'authentification lors de la connexion."""
+        # Simuler une erreur d'authentification
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/version",
+            json={"message": "401 Unauthorized"},
+            status=401
+        )
+    
+        # Vérifier que l'exception appropriée est levée
+        with pytest.raises(APIAuthenticationError):
+>           gitlab_client.connect()
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\extractors\gitlab\gitlab_client.py:151: in connect
+    return self.establish_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6E12850>
+
+    def establish_connection(self) -> bool:
+        """
+        Établit la connexion au serveur GitLab.
+    
+        Returns:
+            bool: True si la connexion est réussie, False sinon
+        """
+        try:
+            self._logger.info("Establishing connection to GitLab API")
+            self._logger.debug(f"API URL: {self._api_url}")
+            self._logger.debug(f"Token length: {len(self._private_token) if self._private_token else 0}")
+    
+            # Créer le client GitLab
+            self._gitlab_client = gitlab.Gitlab(
+                url=self._api_url,
+                private_token=self._private_token,
+                timeout=self._request_timeout,
+                ssl_verify=self._ssl_verification_enabled,
+                retry_transient_errors=self._retry_on_errors
+            )
+    
+            self._logger.debug(f"GitLab client created: {self._gitlab_client}")
+            self._logger.debug(f"GitLab client user manager: {self._gitlab_client.user}")
+    
+            # Configurer le proxy si nécessaire
+            if self._proxy_configuration:
+                self._configure_proxy_settings()
+    
+            # Tester la connexion
+            self._logger.info("Testing GitLab connection...")
+            self._gitlab_client.auth()
+            self._logger.debug("Authentication successful")
+    
+            # Dans python-gitlab 6.1.0, user est directement accessible après auth()
+            current_user = self._gitlab_client.user
+            if current_user is None:
+                raise APIConnectionError("Failed to get current user - authentication may have failed")
+    
+            self._current_user_info = current_user.asdict()
+            self._connection_status = True
+            self.is_connected = True  # Mettre à jour l'état BaseExtractor
+    
+            self._logger.info(
+                f"GitLab connection successful - User: {self._current_user_info.get('name', 'Unknown')}, Server: {self._api_url}"
+            )
+    
+            return True
+    
+        except gitlab.GitlabAuthenticationError as e:
+            self._logger.error(f"Authentication failed: {e}")
+            raise APIAuthenticationError(f"GitLab authentication failed: {e}")
+        except gitlab.GitlabGetError as e:
+            self._logger.error(f"API error: {e}")
+            raise APIConnectionError(f"GitLab API error: {e}")
+        except Exception as e:
+            self._logger.error(f"Unexpected connection error: {e}")
+>           raise APIConnectionError(f"Unexpected GitLab connection error: {e}")
+E           src.core.exceptions.APIConnectionError: Unexpected GitLab connection error: Connection refused by Responses - the call doesn't match any registered mock.
+E           
+E           Request: 
+E           - GET https://gitlab.example.com/api/v4/api/v4/user
+E           
+E           Available matches:
+E           - GET https://gitlab.example.com/api/v4/version URL does not match
+
+src\extractors\gitlab\gitlab_client.py:272: APIConnectionError
+------------------------------ Captured log call ------------------------------
+ERROR    src.extractors.gitlab.gitlab_client:gitlab_client.py:271 Unexpected connection error: Connection refused by Responses - the call doesn't match any registered mock.
+
+Request: 
+- GET https://gitlab.example.com/api/v4/api/v4/user
+
+Available matches:
+- GET https://gitlab.example.com/api/v4/version URL does not match
+________________ TestGitLabClientComplete.test_test_connection ________________
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6C4E780>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A65ED6E0>
+
+    @responses.activate
+    def test_test_connection(self, gitlab_client):
+        """Teste la méthode test_connection du client GitLab."""
+        # Simuler une réponse réussie à l'API Version
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/version",
+            json={"version": "15.5.0"},
+            status=200
+        )
+    
+        # Simuler une réponse réussie à l'API User
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/user",
+            json={"id": 1, "username": "test_user"},
+            status=200
+        )
+    
+        # Exécuter la méthode test_connection
+        result = gitlab_client.test_connection()
+    
+        # Vérifier le résultat
+>       assert result["success"] is True
+E       assert False is True
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:111: AssertionError
+------------------------------ Captured log call ------------------------------
+ERROR    src.extractors.gitlab.gitlab_client:gitlab_client.py:271 Unexpected connection error: Connection refused by Responses - the call doesn't match any registered mock.
+
+Request: 
+- GET https://gitlab.example.com/api/v4/api/v4/user
+
+Available matches:
+- GET https://gitlab.example.com/api/v4/version URL does not match
+- GET https://gitlab.example.com/api/v4/user URL does not match
+______________ TestGitLabClientComplete.test_api_get_successful _______________
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6C720F0>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A65ED810>
+
+    @responses.activate
+    def test_api_get_successful(self, gitlab_client):
+        """Teste une requête GET réussie à l'API GitLab."""
+        # Marquer le client comme connecté
+        gitlab_client.is_connected = True
+    
+        # Simuler une réponse réussie
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/projects",
+            json=[{"id": 1, "name": "project1"}, {"id": 2, "name": "project2"}],
+            status=200
+        )
+    
+        # Exécuter la méthode api_get
+>       result = gitlab_client.api_get("projects", {})
+                 ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'GitLabClient' object has no attribute 'api_get'
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:131: AttributeError
+______________ TestGitLabClientComplete.test_api_get_with_params ______________
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6C1FAC0>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6C72570>
+
+    @responses.activate
+    def test_api_get_with_params(self, gitlab_client):
+        """Teste une requête GET avec paramètres à l'API GitLab."""
+        # Marquer le client comme connecté
+        gitlab_client.is_connected = True
+    
+        # Simuler une réponse réussie
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/projects?visibility=public",
+            json=[{"id": 1, "name": "public_project"}],
+            status=200
+        )
+    
+        # Exécuter la méthode api_get avec des paramètres
+>       result = gitlab_client.api_get("projects", {"visibility": "public"})
+                 ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'GitLabClient' object has no attribute 'api_get'
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:153: AttributeError
+_____________ TestGitLabClientComplete.test_api_get_not_connected _____________
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6C1FCE0>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6DEC830>
+
+    def test_api_get_not_connected(self, gitlab_client):
+        """Teste le comportement de api_get lorsque le client n'est pas connecté."""
+        # S'assurer que le client n'est pas connecté
+        gitlab_client.is_connected = False
+    
+        # Vérifier que l'exception appropriée est levée
+        with pytest.raises(ExtractionError, match="Client GitLab non connecté"):
+>           gitlab_client.api_get("projects", {})
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'GitLabClient' object has no attribute 'api_get'
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:167: AttributeError
+______________ TestGitLabClientComplete.test_api_post_successful ______________
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6CB0850>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6DECCB0>
+
+    @responses.activate
+    def test_api_post_successful(self, gitlab_client):
+        """Teste une requête POST réussie à l'API GitLab."""
+        # Marquer le client comme connecté
+        gitlab_client.is_connected = True
+    
+        # Simuler une réponse réussie
+        responses.add(
+            responses.POST,
+            "https://gitlab.example.com/api/v4/projects",
+            json={"id": 3, "name": "new_project"},
+            status=201
+        )
+    
+        # Préparer les données à envoyer
+        data = {"name": "new_project", "visibility": "private"}
+    
+        # Exécuter la méthode api_post
+>       result = gitlab_client.api_post("projects", data)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'GitLabClient' object has no attribute 'api_post'
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:187: AttributeError
+______________ TestGitLabClientComplete.test_pagination_handling ______________
+
+self = <test_gitlab_client.TestGitLabClientComplete object at 0x00000247A6CB0A50>
+gitlab_client = <src.extractors.gitlab.gitlab_client.GitLabClient object at 0x00000247A6DECA70>
+
+    @responses.activate
+    def test_pagination_handling(self, gitlab_client):
+        """Teste la gestion de la pagination dans les requêtes API."""
+        # Marquer le client comme connecté
+        gitlab_client.is_connected = True
+    
+        # Simuler une réponse paginée (page 1)
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/users?per_page=2&page=1",
+            json=[{"id": 1, "username": "user1"}, {"id": 2, "username": "user2"}],
+            status=200,
+            headers={
+                'X-Page': '1',
+                'X-Per-Page': '2',
+                'X-Total': '5',
+                'X-Total-Pages': '3',
+                'Link': '<https://gitlab.example.com/api/v4/users?per_page=2&page=2>; rel="next"'
+            }
+        )
+    
+        # Simuler une réponse paginée (page 2)
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/users?per_page=2&page=2",
+            json=[{"id": 3, "username": "user3"}, {"id": 4, "username": "user4"}],
+            status=200,
+            headers={
+                'X-Page': '2',
+                'X-Per-Page': '2',
+                'X-Total': '5',
+                'X-Total-Pages': '3',
+                'Link': '<https://gitlab.example.com/api/v4/users?per_page=2&page=3>; rel="next"'
+            }
+        )
+    
+        # Simuler une réponse paginée (page 3)
+        responses.add(
+            responses.GET,
+            "https://gitlab.example.com/api/v4/users?per_page=2&page=3",
+            json=[{"id": 5, "username": "user5"}],
+            status=200,
+            headers={
+                'X-Page': '3',
+                'X-Per-Page': '2',
+                'X-Total': '5',
+                'X-Total-Pages': '3'
+            }
+        )
+    
+        # Exécuter la méthode api_get avec pagination
+>       result = gitlab_client.api_get("users", {"per_page": 2, "page": 1})
+                 ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'GitLabClient' object has no attribute 'api_get'
+
+tests\unit\extractors\gitlab\test_gitlab_client.py:244: AttributeError
+_________ TestGitLabProjectsGateway.test_get_projects_without_params __________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6C77250>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6C27E00>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506756923680'>
+
+    def test_get_projects_without_params(self, projects_gateway, mock_gitlab_client):
+        """Teste la récupération des projets sans paramètres."""
+        # Configuration du mock
+        mock_projects = [{"id": 1, "name": "project1"}, {"id": 2, "name": "project2"}]
+>       mock_gitlab_client.api_get.return_value = mock_projects
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506756923680'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+___________ TestGitLabProjectsGateway.test_get_projects_with_params ___________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6C77390>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6E6FED0>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765725248'>
+
+    def test_get_projects_with_params(self, projects_gateway, mock_gitlab_client):
+        """Teste la récupération des projets avec paramètres."""
+        # Configuration du mock
+        mock_projects = [{"id": 1, "name": "project1"}]
+>       mock_gitlab_client.api_get.return_value = mock_projects
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765725248'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+______________ TestGitLabProjectsGateway.test_get_project_by_id _______________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6C4EB10>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6E6FD90>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765724912'>
+
+    def test_get_project_by_id(self, projects_gateway, mock_gitlab_client):
+        """Teste la récupération d'un projet par son ID."""
+        # Configuration du mock
+        mock_project = {"id": 123, "name": "testproject"}
+>       mock_gitlab_client.api_get.return_value = mock_project
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765724912'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+_____________ TestGitLabProjectsGateway.test_get_project_by_path ______________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6C4E9E0>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6E88B00>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765724576'>
+
+    def test_get_project_by_path(self, projects_gateway, mock_gitlab_client):
+        """Teste la récupération d'un projet par son chemin."""
+        # Configuration du mock pour retourner un seul projet
+        mock_project = {"id": 456, "path_with_namespace": "group/testproject"}
+        mock_projects = [mock_project]
+>       mock_gitlab_client.api_get.return_value = mock_projects
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765724576'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+________ TestGitLabProjectsGateway.test_get_project_by_path_not_found _________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6DEC170>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6E88FC0>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765724240'>
+
+    def test_get_project_by_path_not_found(self, projects_gateway, mock_gitlab_client):
+        """Teste le comportement lorsqu'un projet n'est pas trouvé par chemin."""
+        # Configuration du mock pour retourner une liste vide (projet non trouvé)
+>       mock_gitlab_client.api_get.return_value = []
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765724240'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+_____________ TestGitLabProjectsGateway.test_get_project_commits ______________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6C1FDF0>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6DEE330>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765723904'>
+
+    def test_get_project_commits(self, projects_gateway, mock_gitlab_client):
+        """Teste la récupération des commits d'un projet."""
+        # Configuration du mock
+        mock_commits = [
+            {"id": "abc123", "message": "First commit"},
+            {"id": "def456", "message": "Second commit"}
+        ]
+>       mock_gitlab_client.api_get.return_value = mock_commits
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765723904'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+_____________ TestGitLabProjectsGateway.test_get_project_branches _____________
+
+self = <test_projects_gateway.TestGitLabProjectsGateway object at 0x00000247A6C1FF00>
+projects_gateway = <src.extractors.gitlab.projects_gateway.GitLabProjectsGateway object at 0x00000247A6DF2CF0>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765719200'>
+
+    def test_get_project_branches(self, projects_gateway, mock_gitlab_client):
+        """Teste la récupération des branches d'un projet."""
+        # Configuration du mock
+        mock_branches = [
+            {"name": "main", "merged": False},
+            {"name": "feature", "merged": False}
+        ]
+>       mock_gitlab_client.api_get.return_value = mock_branches
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_projects_gateway.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765719200'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+____________ TestGitLabStatsExtractor.test_get_merge_request_stats ____________
+
+self = <test_stats_extractor.TestGitLabStatsExtractor object at 0x00000247A6C4EEA0>
+stats_extractor = <src.extractors.gitlab.stats_extractor.GitLabStatsExtractor object at 0x00000247A6E89810>
+mock_gateway = <MagicMock spec='GitLabProjectsGateway' id='2506765717520'>
+
+    def test_get_merge_request_stats(self, stats_extractor, mock_gateway):
+        """Tester l'extraction de statistiques de merge requests."""
+        # Configurer le mock pour simuler des merge requests
+        mock_gateway.get_project_merge_requests.return_value = [
+            {
+                "id": 123,
+                "iid": 1,
+                "state": "merged",
+                "title": "Feature A",
+                "created_at": "2023-06-10T10:00:00Z",
+                "merged_at": "2023-06-12T15:00:00Z",
+                "user_notes_count": 3,
+                "approvals_required": 2,
+                "author": {"username": "dev1"},
+                "changes_count": 50
+            },
+            {
+                "id": 456,
+                "iid": 2,
+                "state": "opened",
+                "title": "Feature B",
+                "created_at": "2023-06-15T09:00:00Z",
+                "user_notes_count": 1,
+                "approvals_required": 1,
+                "author": {"username": "dev2"},
+                "changes_count": 120
+            },
+            {
+                "id": 789,
+                "iid": 3,
+                "state": "closed",
+                "title": "Feature C",
+                "created_at": "2023-06-20T14:00:00Z",
+                "closed_at": "2023-06-21T11:00:00Z",
+                "user_notes_count": 5,
+                "approvals_required": 2,
+                "author": {"username": "dev1"},
+                "changes_count": 200
+            }
+        ]
+    
+        # Appeler la méthode
+        stats = stats_extractor.get_merge_request_stats(
+            project_id=1,
+            start_date="2023-06-01",
+            end_date="2023-06-30"
+        )
+    
+        # Vérifier l'appel à la passerelle
+        mock_gateway.get_project_merge_requests.assert_called_once_with(
+            1,
+            params={
+                'created_after': '2023-06-01',
+                'created_before': '2023-06-30',
+            }
+        )
+    
+        # Vérifier les statistiques générées
+        assert stats['total_mrs'] == 3
+        assert stats['open_mrs'] == 1
+        assert stats['merged_mrs'] == 1
+        assert stats['closed_mrs'] == 1
+        assert stats['avg_comments'] == 3.0  # (3 + 1 + 5) / 3
+        assert stats['mrs_by_author']['dev1'] == 2
+        assert stats['mrs_by_author']['dev2'] == 1
+        assert stats['avg_time_to_merge'] > 0
+        # 50 lignes -> small, 120 -> medium, 200 -> medium-large
+        assert stats['size_distribution']['small'] == 1
+>       assert stats['size_distribution']['medium'] == 1
+E       assert 2 == 1
+
+tests\unit\extractors\gitlab\test_stats_extractor.py:204: AssertionError
+____________ TestGitLabUsersGateway.test_get_users_without_params _____________
+
+self = <test_users_gateway.TestGitLabUsersGateway object at 0x00000247A6C77B10>
+users_gateway = <src.extractors.gitlab.users_gateway.GitLabUsersGateway object at 0x00000247A6E15940>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765721552'>
+
+    def test_get_users_without_params(self, users_gateway, mock_gitlab_client):
+        """Teste la récupération des utilisateurs sans paramètres."""
+        # Configuration du mock
+        mock_users = [{"id": 1, "username": "user1"}, {"id": 2, "username": "user2"}]
+>       mock_gitlab_client.api_get.return_value = mock_users
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_users_gateway.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765721552'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+______________ TestGitLabUsersGateway.test_get_users_with_params ______________
+
+self = <test_users_gateway.TestGitLabUsersGateway object at 0x00000247A6C77C50>
+users_gateway = <src.extractors.gitlab.users_gateway.GitLabUsersGateway object at 0x00000247A6E6FD90>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506756923680'>
+
+    def test_get_users_with_params(self, users_gateway, mock_gitlab_client):
+        """Teste la récupération des utilisateurs avec paramètres."""
+        # Configuration du mock
+        mock_users = [{"id": 1, "username": "user1"}]
+>       mock_gitlab_client.api_get.return_value = mock_users
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_users_gateway.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506756923680'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+_________________ TestGitLabUsersGateway.test_get_user_by_id __________________
+
+self = <test_users_gateway.TestGitLabUsersGateway object at 0x00000247A6C4F230>
+users_gateway = <src.extractors.gitlab.users_gateway.GitLabUsersGateway object at 0x00000247A6E6F890>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506763697664'>
+
+    def test_get_user_by_id(self, users_gateway, mock_gitlab_client):
+        """Teste la récupération d'un utilisateur par son ID."""
+        # Configuration du mock
+        mock_user = {"id": 123, "username": "testuser"}
+>       mock_gitlab_client.api_get.return_value = mock_user
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_users_gateway.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506763697664'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+______________ TestGitLabUsersGateway.test_get_user_by_username _______________
+
+self = <test_users_gateway.TestGitLabUsersGateway object at 0x00000247A6C4F100>
+users_gateway = <src.extractors.gitlab.users_gateway.GitLabUsersGateway object at 0x00000247A6E1F950>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506756353600'>
+
+    def test_get_user_by_username(self, users_gateway, mock_gitlab_client):
+        """Teste la récupération d'un utilisateur par son nom d'utilisateur."""
+        # Configuration du mock
+        mock_users = [{"id": 456, "username": "specific_user"}]
+>       mock_gitlab_client.api_get.return_value = mock_users
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_users_gateway.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506756353600'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+_________ TestGitLabUsersGateway.test_get_user_by_username_not_found __________
+
+self = <test_users_gateway.TestGitLabUsersGateway object at 0x00000247A6DEE210>
+users_gateway = <src.extractors.gitlab.users_gateway.GitLabUsersGateway object at 0x00000247A6E1F5C0>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765715504'>
+
+    def test_get_user_by_username_not_found(self, users_gateway, mock_gitlab_client):
+        """Teste le comportement lorsqu'un utilisateur n'est pas trouvé par nom d'utilisateur."""
+        # Configuration du mock pour retourner une liste vide (utilisateur non trouvé)
+>       mock_gitlab_client.api_get.return_value = []
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_users_gateway.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765715504'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+________________ TestGitLabUsersGateway.test_get_current_user _________________
+
+self = <test_users_gateway.TestGitLabUsersGateway object at 0x00000247A6DF0270>
+users_gateway = <src.extractors.gitlab.users_gateway.GitLabUsersGateway object at 0x00000247A6DEF9B0>
+mock_gitlab_client = <MagicMock spec='GitLabClient' id='2506765717856'>
+
+    def test_get_current_user(self, users_gateway, mock_gitlab_client):
+        """Teste la récupération de l'utilisateur courant."""
+        # Configuration du mock
+        mock_current_user = {"id": 789, "username": "current_user"}
+>       mock_gitlab_client.api_get.return_value = mock_current_user
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\extractors\gitlab\test_users_gateway.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <MagicMock spec='GitLabClient' id='2506765717856'>, name = 'api_get'
+
+    def __getattr__(self, name):
+        if name in {'_mock_methods', '_mock_unsafe'}:
+            raise AttributeError(name)
+        elif self._mock_methods is not None:
+            if name not in self._mock_methods or name in _all_magics:
+>               raise AttributeError("Mock object has no attribute %r" % name)
+E               AttributeError: Mock object has no attribute 'api_get'
+
+C:\Users\y47437\AppData\Local\Programs\Python\Python313\Lib\unittest\mock.py:690: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_connect_successful
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_connect_authentication_error
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_test_connection
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_get_successful
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_get_with_params
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_get_not_connected
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_api_post_successful
+FAILED tests/unit/extractors/gitlab/test_gitlab_client.py::TestGitLabClientComplete::test_pagination_handling
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_projects_without_params
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_projects_with_params
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_by_id
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_by_path
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_by_path_not_found
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_commits
+FAILED tests/unit/extractors/gitlab/test_projects_gateway.py::TestGitLabProjectsGateway::test_get_project_branches
+FAILED tests/unit/extractors/gitlab/test_stats_extractor.py::TestGitLabStatsExtractor::test_get_merge_request_stats
+FAILED tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_users_without_params
+FAILED tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_users_with_params
+FAILED tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_user_by_id
+FAILED tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_user_by_username
+FAILED tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_user_by_username_not_found
+FAILED tests/unit/extractors/gitlab/test_users_gateway.py::TestGitLabUsersGateway::test_get_current_user
+================== 22 failed, 6 passed in 415.17s (0:06:55) ===================
+```
+
+## Test: pytest tests/unit/extractors/test_gitlab_users.py -v
+
+```
+============================= test session starts =============================
+platform win32 -- Python 3.13.4, pytest-8.4.1, pluggy-1.6.0 -- d:\SMI_DEVS\DEVOPS_ETL\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\SMI_DEVS\DEVOPS_ETL
+configfile: pyproject.toml
+plugins: cov-6.2.1
+collecting ... collected 4 items
+
+tests/unit/extractors/test_gitlab_users.py::TestGitLabUsersExport::test_identify_bot_accounts_bot_detection FAILED [ 25%]
+tests/unit/extractors/test_gitlab_users.py::TestGitLabUsersExport::test_identify_bot_accounts_human_detection PASSED [ 50%]
+tests/unit/extractors/test_gitlab_users.py::TestGitLabUsersExport::test_identify_bot_accounts_inactive FAILED [ 75%]
+tests/unit/extractors/test_gitlab_users.py::TestGitLabUsersExport::test_identify_bot_accounts_mixed_users PASSED [100%]
+
+================================== FAILURES ===================================
+_______ TestGitLabUsersExport.test_identify_bot_accounts_bot_detection ________
+
+self = <test_gitlab_users.TestGitLabUsersExport testMethod=test_identify_bot_accounts_bot_detection>
+
+    def test_identify_bot_accounts_bot_detection(self):
+        """Teste la détection des comptes bot."""
+        # Créer des exemples de comptes bot
+        bot_examples = [
+            {"username": "ghost", "name": "Ghost User", "email": "ghost@example.com"},
+            {"username": "gitlab-bot", "name": "GitLab Bot", "email": "bot@gitlab.com"},
+            {"username": "jenkins-ci", "name": "Jenkins CI", "email": "ci@jenkins.io"},
+            {"username": "system", "name": "System", "email": "noreply@gitlab.com"},
+            {"username": "user001", "name": "Test User 001", "email": "test001@example.com"},
+            {"username": "notification-bot", "name": "Notifications", "email": "no-reply@gitlab.com"},
+        ]
+    
+        # Appeler la fonction à tester
+        human_users, bot_users = identify_bot_accounts(bot_examples)
+    
+        # Vérifier que tous les exemples sont identifiés comme bots
+>       self.assertEqual(len(bot_users), len(bot_examples),
+                         "Tous les comptes d'exemple devraient être identifiés comme des bots")
+E       AssertionError: 2 != 6 : Tous les comptes d'exemple devraient être identifiés comme des bots
+
+tests\unit\extractors\test_gitlab_users.py:37: AssertionError
+__________ TestGitLabUsersExport.test_identify_bot_accounts_inactive __________
+
+self = <test_gitlab_users.TestGitLabUsersExport testMethod=test_identify_bot_accounts_inactive>
+
+    def test_identify_bot_accounts_inactive(self):
+        """Teste la détection des comptes bots inactifs."""
+        # Date actuelle pour les tests
+        now = datetime.now()
+    
+        # Créer des exemples de comptes avec différentes dates d'activité
+        users_with_dates = [
+            {
+                "username": "old_account",
+                "created_at": (now - timedelta(days=500)).isoformat(),
+                "last_activity_on": None,  # Jamais utilisé
+                "email": "old@example.com"
+            },  # Bot (créé il y a longtemps, jamais utilisé)
+            {
+                "username": "recent_account",
+                "created_at": (now - timedelta(days=30)).isoformat(),
+                "last_activity_on": None,  # Jamais utilisé, mais récent
+                "email": "recent@example.com"
+            },  # Humain (créé récemment)
+            {
+                "username": "active_account",
+                "created_at": (now - timedelta(days=365)).isoformat(),
+                "last_activity_on": (now - timedelta(days=10)).strftime("%Y-%m-%d"),
+                "email": "active@example.com"
+            },  # Humain (actif récemment)
+        ]
+    
+        # Appeler la fonction à tester
+        human_users, bot_users = identify_bot_accounts(users_with_dates)
+    
+        # Vérifier les résultats
+>       self.assertEqual(len(bot_users), 1, "Un compte devrait être identifié comme bot")
+E       AssertionError: 0 != 1 : Un compte devrait être identifié comme bot
+
+tests\unit\extractors\test_gitlab_users.py:126: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/extractors/test_gitlab_users.py::TestGitLabUsersExport::test_identify_bot_accounts_bot_detection
+FAILED tests/unit/extractors/test_gitlab_users.py::TestGitLabUsersExport::test_identify_bot_accounts_inactive
+========================= 2 failed, 2 passed in 2.72s =========================
+```
+
+## Test: pytest tests/unit/test_gitlab_client.py -v
+
+```
+============================= test session starts =============================
+platform win32 -- Python 3.13.4, pytest-8.4.1, pluggy-1.6.0 -- d:\SMI_DEVS\DEVOPS_ETL\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\SMI_DEVS\DEVOPS_ETL
+configfile: pyproject.toml
+plugins: cov-6.2.1
+collecting ... collected 5 items
+
+tests/unit/test_gitlab_client.py::TestGitLabClient::test_connect_auth_error PASSED [ 20%]
+tests/unit/test_gitlab_client.py::TestGitLabClient::test_connect_success FAILED [ 40%]
+tests/unit/test_gitlab_client.py::TestGitLabClient::test_get_paginated_results FAILED [ 60%]
+tests/unit/test_gitlab_client.py::TestGitLabClient::test_init PASSED     [ 80%]
+tests/unit/test_gitlab_client.py::TestGitLabClient::test_make_request FAILED [100%]
+
+================================== FAILURES ===================================
+____________________ TestGitLabClient.test_connect_success ____________________
+
+self = <tests.unit.test_gitlab_client.TestGitLabClient testMethod=test_connect_success>
+mock_gitlab = <MagicMock name='Gitlab' id='1832712189472'>
+
+    @patch('gitlab.Gitlab')
+    def test_connect_success(self, mock_gitlab):
+        """Teste la connexion réussie au serveur GitLab."""
+        # Configuration du mock
+        mock_gl_instance = MagicMock()
+        mock_user = MagicMock()
+        mock_user.id = 123
+        mock_user.username = "testuser"
+        mock_user.name = "Test User"
+        mock_user.email = "test@example.com"
+        mock_user.is_admin = False
+    
+        mock_gl_instance.user = mock_user
+        mock_gitlab.return_value = mock_gl_instance
+    
+        # Test de la connexion
+        result = self.client.connect()
+    
+        # Vérification des appels
+        mock_gitlab.assert_called_once_with(
+            url=self.gitlab_config.get("api_url"),
+            private_token=self.gitlab_config.get("private_token"),
+>           ssl_verify=self.client.verify_ssl,
+                       ^^^^^^^^^^^^^^^^^^^^^^
+            timeout=self.client.timeout,
+            retry_transient_errors=True,
+            per_page=self.client.items_per_page
+        )
+E       AttributeError: 'GitLabClient' object has no attribute 'verify_ssl'
+
+tests\unit\test_gitlab_client.py:63: AttributeError
+------------------------------ Captured log call ------------------------------
+WARNING  src.extractors.gitlab.gitlab_client:gitlab_client.py:138 SSL verification disabled. This is not recommended for production.
+_________________ TestGitLabClient.test_get_paginated_results _________________
+
+self = <tests.unit.test_gitlab_client.TestGitLabClient testMethod=test_get_paginated_results>
+mock_gitlab = <MagicMock name='Gitlab' id='1832712188800'>
+
+    @patch('gitlab.Gitlab')
+    def test_get_paginated_results(self, mock_gitlab):
+        """Teste la méthode _get_paginated_results."""
+        # Configuration du mock
+        mock_gl_instance = MagicMock()
+        mock_result1 = MagicMock()
+        mock_result1.attributes = {"id": 1, "name": "test1"}
+        mock_result2 = MagicMock()
+        mock_result2.attributes = {"id": 2, "name": "test2"}
+        mock_gl_instance.http_list.return_value = [mock_result1, mock_result2]
+        mock_gitlab.return_value = mock_gl_instance
+    
+        # Configurer le client
+>       self.client.gl = mock_gl_instance
+        ^^^^^^^^^^^^^^
+E       AttributeError: property 'gl' of 'GitLabClient' object has no setter
+
+tests\unit\test_gitlab_client.py:125: AttributeError
+------------------------------ Captured log call ------------------------------
+WARNING  src.extractors.gitlab.gitlab_client:gitlab_client.py:138 SSL verification disabled. This is not recommended for production.
+_____________________ TestGitLabClient.test_make_request ______________________
+
+self = <tests.unit.test_gitlab_client.TestGitLabClient testMethod=test_make_request>
+mock_gitlab = <MagicMock name='Gitlab' id='1832713785360'>
+
+    @patch('gitlab.Gitlab')
+    def test_make_request(self, mock_gitlab):
+        """Teste la méthode _make_request."""
+        # Configuration du mock
+        mock_gl_instance = MagicMock()
+        mock_gl_instance.http_get.return_value = {"id": 1, "name": "test"}
+        mock_gitlab.return_value = mock_gl_instance
+    
+        # Configurer le client
+>       self.client.gl = mock_gl_instance
+        ^^^^^^^^^^^^^^
+E       AttributeError: property 'gl' of 'GitLabClient' object has no setter
+
+tests\unit\test_gitlab_client.py:100: AttributeError
+------------------------------ Captured log call ------------------------------
+WARNING  src.extractors.gitlab.gitlab_client:gitlab_client.py:138 SSL verification disabled. This is not recommended for production.
+=========================== short test summary info ===========================
+FAILED tests/unit/test_gitlab_client.py::TestGitLabClient::test_connect_success
+FAILED tests/unit/test_gitlab_client.py::TestGitLabClient::test_get_paginated_results
+FAILED tests/unit/test_gitlab_client.py::TestGitLabClient::test_make_request
+========================= 3 failed, 2 passed in 2.70s =========================
+```
+
+## Test: pytest tests/unit/test_gitlab_connection.py -v
+
+```
+============================= test session starts =============================
+platform win32 -- Python 3.13.4, pytest-8.4.1, pluggy-1.6.0 -- d:\SMI_DEVS\DEVOPS_ETL\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\SMI_DEVS\DEVOPS_ETL
+configfile: pyproject.toml
+plugins: cov-6.2.1
+collecting ... collected 4 items
+
+tests/unit/test_gitlab_connection.py::TestGitLabConnection::test_gitlab_config_exists PASSED [ 25%]
+tests/unit/test_gitlab_connection.py::TestGitLabConnection::test_gitlab_api_accessible FAILED [ 50%]
+tests/unit/test_gitlab_connection.py::TestGitLabConnection::test_gitlab_authentication PASSED [ 75%]
+tests/unit/test_gitlab_connection.py::TestGitLabConnection::test_gitlab_users_accessible PASSED [100%]
+
+================================== FAILURES ===================================
+_______________ TestGitLabConnection.test_gitlab_api_accessible _______________
+
+self = <tests.unit.test_gitlab_connection.TestGitLabConnection object at 0x000001A5B2D1A0D0>
+gitlab_client = <gitlab.client.Gitlab object at 0x000001A5B26F6E40>
+
+    def test_gitlab_api_accessible(self, gitlab_client):
+        """Vérifie que l'API GitLab est accessible (sans authentification)."""
+        try:
+            # La méthode version() ne nécessite pas d'authentification
+            version_info = gitlab_client.version()
+    
+            assert version_info is not None, "Pas d'informations de version retournées"
+>           assert 'version' in version_info, "Version GitLab non retournée"
+E           AssertionError: Version GitLab non retournée
+E           assert 'version' in ('18.1.2-ee', 'cd9f1ac5ba9')
+
+tests\unit\test_gitlab_connection.py:70: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = <tests.unit.test_gitlab_connection.TestGitLabConnection object at 0x000001A5B2D1A0D0>
+gitlab_client = <gitlab.client.Gitlab object at 0x000001A5B26F6E40>
+
+    def test_gitlab_api_accessible(self, gitlab_client):
+        """Vérifie que l'API GitLab est accessible (sans authentification)."""
+        try:
+            # La méthode version() ne nécessite pas d'authentification
+            version_info = gitlab_client.version()
+    
+            assert version_info is not None, "Pas d'informations de version retournées"
+            assert 'version' in version_info, "Version GitLab non retournée"
+    
+            logger.info(f"\u2705 API GitLab accessible - Version: {version_info.get('version')}")
+        except Exception as e:
+            logger.error(f"\u274c Impossible d'acc\xe9der \xe0 l'API GitLab: {e}")
+>           pytest.fail(f"Échec de l'accès à l'API GitLab: {e}")
+E           Failed: Échec de l'accès à l'API GitLab: Version GitLab non retournée
+E           assert 'version' in ('18.1.2-ee', 'cd9f1ac5ba9')
+
+tests\unit\test_gitlab_connection.py:75: Failed
+------------------------------ Captured log call ------------------------------
+ERROR    tests.unit.test_gitlab_connection:test_gitlab_connection.py:74 \u274c Impossible d'acc\xe9der \xe0 l'API GitLab: Version GitLab non retourn\xe9e\nassert 'version' in ('18.1.2-ee', 'cd9f1ac5ba9')
+============================== warnings summary ===============================
+tests/unit/test_gitlab_connection.py::TestGitLabConnection::test_gitlab_users_accessible
+  D:\SMI_DEVS\DEVOPS_ETL\tests\unit\test_gitlab_connection.py:99: UserWarning: Calling a `list()` method without specifying `get_all=True` or `iterator=True` will return a maximum of 5 items. Your query returned 5 of 176 items. See https://python-gitlab.readthedocs.io/en/v6.1.0/api-usage.html#pagination for more details. If this was done intentionally, then this warning can be supressed by adding the argument `get_all=False` to the `list()` call. (python-gitlab: D:\SMI_DEVS\DEVOPS_ETL\tests\unit\test_gitlab_connection.py:99)
+    users = gitlab_client.users.list(per_page=5)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_gitlab_connection.py::TestGitLabConnection::test_gitlab_api_accessible
+=================== 1 failed, 3 passed, 1 warning in 4.09s ====================
+```

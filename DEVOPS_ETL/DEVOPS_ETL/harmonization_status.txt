@@ -1,0 +1,9 @@
+Début de la vérification
+✅ Import du gestionnaire de secrets réussi
+✅ Secrets GitLab: ['api_url', 'private_token', 'verify_ssl']
+✅ Import du client GitLab réussi
+✅ Import de la passerelle utilisateurs GitLab réussi
+✅ Import de identify_bot_accounts réussi
+✅ Test identify_bot_accounts: 0 humains, 1 bots
+
+Test terminé

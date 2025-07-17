@@ -1,0 +1,44 @@
+=== Affichage des utilisateurs GitLab ===
+
+Récupération de la configuration GitLab...
+Initialisation du client GitLab...
+Initialisation de la passerelle utilisateurs GitLab...
+Récupération des utilisateurs depuis GitLab...
+
+Nombre total d'utilisateurs: 20
+- Développeurs humains: 20
+- Bots: 0
+
+Premiers utilisateurs humains:
+1. El Mehdi EL AFAR (EELAFAR) - Email: eelafar@oncf.net
+   ID: 219
+   État: active
+   Admin: Non
+   URL: https://gitlab.oncf.net/EELAFAR
+
+2. Oussama KHALOUK (Okhalouk) - Email: okhalouk@oncf.net
+   ID: 218
+   État: active
+   Admin: Non
+   URL: https://gitlab.oncf.net/Okhalouk
+
+3. HATAR AMINE (HATAR) - Email: hatar@oncf.net
+   ID: 217
+   État: active
+   Admin: Non
+   URL: https://gitlab.oncf.net/HATAR
+
+4. EL JADDIOUI BRAHIM (ELJADDIOUI) - Email: eljaddioui@oncf.net
+   ID: 216
+   État: active
+   Admin: Non
+   URL: https://gitlab.oncf.net/ELJADDIOUI
+
+5. Hassan EL BAKKOURI (ELBAKKOURI) - Email: elbakkouri@oncf.net
+   ID: 215
+   État: active
+   Admin: Non
+   URL: https://gitlab.oncf.net/ELBAKKOURI
+
+=== Fin de l'affichage ===
+Résultats sauvegardés dans: D:\SMI_DEVS\DEVOPS_ETL\users_display_results.txt

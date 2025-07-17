@@ -1,0 +1,12 @@
+# Dépendances de base
+pyyaml==6.0.2
+requests==2.32.4
+python-dotenv==1.1.1
+openpyxl==3.1.5
+pandas==2.3.1
+dependency-injector==4.48.1
+pydantic==2.11.7  # Note: Migration de Pydantic v1 à v2 nécessite des modifications de code
+python-gitlab==6.1.0  # Version stable compatible avec GitLab CE on-premise
+
+# Pour l'installation locale en mode développement
+-e .

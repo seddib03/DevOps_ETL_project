@@ -1,0 +1,31 @@
+# Configuration GitLab pour l'environnement de développement
+gitlab:
+  # Nombre de secondes avant timeout de la requête
+  timeout: 30
+  # Nombre maximal de tentatives en cas d'échec
+  max_retries: 3
+  # Délai entre les tentatives (en secondes)
+  retry_delay: 5
+  # Nombre d'éléments par page pour les requêtes paginées
+  items_per_page: 100
+
+# Configuration SonarQube pour l'environnement de développement
+sonarqube:
+  # Nombre de secondes avant timeout de la requête
+  timeout: 30
+  # Nombre maximal de tentatives en cas d'échec
+  max_retries: 3
+
+# Configuration DefectDojo pour l'environnement de développement
+defect_dojo:
+  # Nombre de secondes avant timeout de la requête
+  timeout: 30
+  # Nombre maximal de tentatives en cas d'échec
+  max_retries: 3
+
+# Configuration Dependency Track pour l'environnement de développement
+dependency_track:
+  # Nombre de secondes avant timeout de la requête
+  timeout: 30
+  # Nombre maximal de tentatives en cas d'échec
+  max_retries: 3

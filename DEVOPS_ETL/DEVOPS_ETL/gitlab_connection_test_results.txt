@@ -1,0 +1,24 @@
+Test de connexion GitLab - 2025-07-15 16:26:06
+
+=== Test de connexion à GitLab ===
+URL API: https://gitlab.oncf.net
+SSL verify: False
+
+Initialisation du client GitLab...
+
+Test 1: Vérification de la version...
+Version GitLab: ('18.1.2-ee', 'cd9f1ac5ba9')
+
+Test 2: Authentification...
+Authentifié en tant que: BOURY YASSINE (y.boury)
+Email: y.boury@oncf.ma
+
+Test 3: Récupération des utilisateurs...
+Utilisateurs récupérés: 3
+- El Mehdi EL AFAR (EELAFAR)
+- Oussama KHALOUK (Okhalouk)
+- HATAR AMINE (HATAR)
+
+✅ Test de connexion réussi
+
+Résultats enregistrés dans: D:\SMI_DEVS\DEVOPS_ETL\gitlab_connection_test_results.txt

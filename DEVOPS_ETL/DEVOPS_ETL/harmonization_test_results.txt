@@ -1,0 +1,37 @@
+=== Vérification de l'harmonisation des fichiers ===
+=== Vérification de l'harmonisation des fichiers ===
+
+✅ Import du gestionnaire de secrets réussi
+✅ Récupération des secrets GitLab: ['api_url', 'private_token', 'verify_ssl']
+✅ URL GitLab: https://gitlab.oncf.net
+
+✅ Import du client GitLab réussi
+
+❌ Échec du test du client GitLab: GitLabClient.__init__() missing 1 required positional argument: 'gitlab_config'
+Traceback (most recent call last):
+  File "D:\SMI_DEVS\DEVOPS_ETL\test_harmonization_with_log.py", line 48, in test_gitlab_client
+    client = GitLabClient()
+TypeError: GitLabClient.__init__() missing 1 required positional argument: 'gitlab_config'
+
+
+✅ Import de la passerelle utilisateurs GitLab réussi
+
+❌ Échec du test de la passerelle utilisateurs GitLab: GitLabClient.__init__() missing 1 required positional argument: 'gitlab_config'
+Traceback (most recent call last):
+  File "D:\SMI_DEVS\DEVOPS_ETL\test_harmonization_with_log.py", line 63, in test_gitlab_users_gateway
+    client = GitLabClient()
+TypeError: GitLabClient.__init__() missing 1 required positional argument: 'gitlab_config'
+
+
+✅ Import de la fonction identify_bot_accounts réussi
+✅ Fonction identify_bot_accounts exécutée: 0 humains, 1 bots
+
+=== Résultats des tests ===
+✅ Réussi - Secret Manager
+❌ Échec - GitLab Client
+❌ Échec - GitLab Users Gateway
+✅ Réussi - Export GitLab Users
+
+Résultat global: 2/4 tests réussis
+
+Voir le fichier D:\SMI_DEVS\DEVOPS_ETL\harmonization_test_results.txt pour les détails complets.

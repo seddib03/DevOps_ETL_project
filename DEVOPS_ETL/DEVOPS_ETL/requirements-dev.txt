@@ -1,0 +1,12 @@
+# Dépendances de développement
+pytest>=7.4.3
+pytest-cov>=4.1.0
+black>=23.9.1
+isort>=5.12.0
+mypy>=1.5.1
+flake8>=6.1.0
+pylint>=3.0.2
+responses>=0.23.1  # Pour les tests d'API simulées
+
+# Inclure les dépendances de base
+-r requirements.txt
