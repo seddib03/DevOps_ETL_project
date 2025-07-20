@@ -157,3 +157,20 @@ class GitLabProjectsGateway:
         resource=f"projects/{project_id}/repository/branches",
         params=params or {}
     )
+ #commits_incremental
+    def get_project_commits_incremental(self, project_id: int, since: str) -> List[Dict[str, Any]]:
+        """
+        Récupère les commits d'un projet depuis une date spécifique.
+        
+        Args:
+            project_id: Identifiant du projet.
+            since: Date de début au format "YYYY-MM-DD".
+            
+        Returns:
+            Liste de dictionnaires représentant les commits depuis la date spécifiée.
+        """
+        params = {"since": since}
+        return self.client.extract(
+            resource=f"projects/{project_id}/repository/commits",
+            params=params
+        )
