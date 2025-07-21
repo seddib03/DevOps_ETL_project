@@ -65,9 +65,9 @@ class GitLabProjectsGateway:
             resource=f"projects/{project_id}/members/all"
         )
 
-    def get_project_commits(self, project_id: int, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_project_commits(self, project_id: int, params: Optional[Dict[str, Any]] = None, since: Optional[str] = None) -> List[Dict[str, Any]]:
         """
-        Récupère les commits d'un projet.
+        Récupère les commits d'un projet, extraction incrémentale possible.
         
         Args:
             project_id: Identifiant du projet.
@@ -75,18 +75,21 @@ class GitLabProjectsGateway:
                    - ref_name="branch" (branche spécifique)
                    - since="YYYY-MM-DD" (commits depuis date)
                    - until="YYYY-MM-DD" (commits jusqu'à date)
-                   
+            since: Date de début au format "YYYY-MM-DD" (extraction incrémentale)
         Returns:
             Liste de dictionnaires représentant les commits.
         """
+        parameters = params.copy() if params else {}
+        if since:
+            parameters["since"] = since
         return self.client.extract(
             resource=f"projects/{project_id}/repository/commits",
-            params=params
+            params=parameters
         )
 
-    def get_project_merge_requests(self, project_id: int, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_project_merge_requests(self, project_id: int, params: Optional[Dict[str, Any]] = None, updated_after: Optional[str] = None) -> List[Dict[str, Any]]:
         """
-        Récupère les merge requests d'un projet.
+        Récupère les merge requests d'un projet, extraction incrémentale possible.
         
         Args:
             project_id: Identifiant du projet.
@@ -94,18 +97,21 @@ class GitLabProjectsGateway:
                    - state="opened" (état: opened, closed, locked, merged)
                    - created_after="YYYY-MM-DD" (créées après date)
                    - updated_after="YYYY-MM-DD" (mises à jour après date)
-                   
+            updated_after: Date de mise à jour au format "YYYY-MM-DD" (extraction incrémentale)
         Returns:
             Liste de dictionnaires représentant les merge requests.
         """
+        parameters = params.copy() if params else {}
+        if updated_after:
+            parameters["updated_after"] = updated_after
         return self.client.extract(
             resource=f"projects/{project_id}/merge_requests",
-            params=params
+            params=parameters
         )
 
-    def get_project_issues(self, project_id: int, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_project_issues(self, project_id: int, params: Optional[Dict[str, Any]] = None, updated_after: Optional[str] = None) -> List[Dict[str, Any]]:
         """
-        Récupère les issues d'un projet.
+        Récupère les issues d'un projet, extraction incrémentale possible.
         
         Args:
             project_id: Identifiant du projet.
@@ -113,18 +119,21 @@ class GitLabProjectsGateway:
                    - state="opened" (état: opened, closed)
                    - labels="bug,critical" (filtrage par labels)
                    - created_after="YYYY-MM-DD" (créées après date)
-                   
+            updated_after: Date de mise à jour au format "YYYY-MM-DD" (extraction incrémentale)
         Returns:
             Liste de dictionnaires représentant les issues.
         """
+        parameters = params.copy() if params else {}
+        if updated_after:
+            parameters["updated_after"] = updated_after
         return self.client.extract(
             resource=f"projects/{project_id}/issues",
-            params=params
+            params=parameters
         )
 
-    def get_project_pipelines(self, project_id: int, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_project_pipelines(self, project_id: int, params: Optional[Dict[str, Any]] = None, updated_after: Optional[str] = None) -> List[Dict[str, Any]]:
         """
-        Récupère les pipelines d'un projet.
+        Récupère les pipelines d'un projet, extraction incrémentale possible.
         
         Args:
             project_id: Identifiant du projet.
@@ -132,13 +141,16 @@ class GitLabProjectsGateway:
                    - status="success" (statut: running, pending, success, failed, canceled)
                    - ref="main" (référence/branche)
                    - updated_after="YYYY-MM-DD" (mises à jour après date)
-                   
+            updated_after: Date de mise à jour au format "YYYY-MM-DD" (extraction incrémentale)
         Returns:
             Liste de dictionnaires représentant les pipelines.
         """
+        parameters = params.copy() if params else {}
+        if updated_after:
+            parameters["updated_after"] = updated_after
         return self.client.extract(
             resource=f"projects/{project_id}/pipelines",
-            params=params
+            params=parameters
         )
         
     #extraction des branches 
