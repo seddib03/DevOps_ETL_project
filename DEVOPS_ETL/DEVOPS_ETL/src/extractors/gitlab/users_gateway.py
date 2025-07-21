@@ -21,9 +21,9 @@ class GitLabUsersGateway:
         """
         self.client = gitlab_client
 
-    def get_users(self, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_users(self, params: Optional[Dict[str, Any]] = None, updated_after: Optional[str] = None) -> List[Dict[str, Any]]:
         """
-        Récupère la liste des utilisateurs selon les critères fournis.
+        Récupère la liste des utilisateurs selon les critères fournis, extraction incrémentielle possible.
         
         Args:
             params: Dictionnaire de paramètres pour filtrer les utilisateurs.
@@ -32,21 +32,20 @@ class GitLabUsersGateway:
                    - search="nom" (recherche par nom ou email)
                    - username="username" (recherche par nom d'utilisateur)
                    - external=True (utilisateurs externes uniquement)
-        
+            updated_after: Date de mise à jour au format "YYYY-MM-DD" (extraction incrémentielle)
         Returns:
             Liste de dictionnaires représentant les utilisateurs.
         """
-        params = params or {}
-        
+        params = params.copy() if params else {}
+        if updated_after:
+            params["updated_after"] = updated_after
         try:
             # S'assurer que le client est connecté
             if not self.client.is_connected:
                 self.client.connect()
-            
             # Utiliser l'API users de python-gitlab 6.1.0
             # https://python-gitlab.readthedocs.io/en/stable/gl_objects/users.html
             users_list = self.client.gl.users.list(**params)
-            
             # Convertir les objets utilisateur en dictionnaires
             return [user.asdict() for user in users_list]
         except Exception as e:
